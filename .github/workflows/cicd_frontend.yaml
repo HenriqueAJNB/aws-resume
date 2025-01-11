@@ -1,9 +1,15 @@
 name: Upload to S3
 
-on: [pull_request, push]
+on:
+  push:
+    paths:
+      - 'frontend/**' # Trigger on changes in the "frontend" folder
+  pull_request:
+    paths:
+      - 'frontend/**'
 
 jobs:
-  upload:
+  cicd-frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
