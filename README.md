@@ -10,6 +10,6 @@ This project showcases not just my resume, but also my hands-on experience with 
 
 Are you curious about the project's documentation and architecture or how it was designed? Check it [here](./docs/README.md)!
 
-Or if you want just to visit my resume, click [here](http://henrique-awscv.com.s3-website-us-east-1.amazonaws.com/).
+Or if you want just to visit my resume, click [here](https://henrique-awscv.com/).
 
 Feel free to check out my work and get in touch!

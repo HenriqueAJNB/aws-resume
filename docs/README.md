@@ -1,28 +1,66 @@
-# 📚 Projects documentation
+# 📚 Projects Documentation
 
 ## 🏗️ Architecture
 
 ![architecture](.//img/architecture.png)
 
-### 🔧 Components
+The architecture illustrates a serverless web application divided into a static frontend and a serverless backend. The frontend is hosted on Amazon S3, distributed via CloudFront, and secured with SSL/TLS. The backend uses API Gateway and Lambda to handle dynamic requests, updating the visitor count in DynamoDB.
 
-- **Frontend**: Static HTML/CSS/JavaScript website hosted on Amazon S3.
+---
+
+## 🔧 Components
+
+- **Frontend**: Static HTML/CSS/JavaScript website hosted on Amazon S3, distributed through Amazon CloudFront and Amazon Route 53.
 - **Backend**: Serverless architecture using AWS Lambda, API Gateway, and DynamoDB.
 - **Infrastructure**: AWS Cloud infrastructure managed manually.
+
+---
 
 ## 🖥️ Frontend documentation
 
 ### 📂 Website structure
 
-- `index.html`: Main HTML resume page.
-- `style.css`: Contains CSS formatting applied to HTML.
-- `visitors_counter.js`: Contains the visitor counter JavaScript implementation calling backend services.
+- **`index.html`**: Main HTML page for the resume.
+- **`style.css`**: Contains CSS formatting for the website.
+- **`visitors_counter.js`**: Implements the visitor counter, calling backend services.
+
+---
+
+### 🛫 Routes structure
+
+#### **Amazon Route 53**
+
+- Routes traffic to the custom domain linked to the static website hosted on S3 and provides global DNS resolution.
+
+#### **Amazon CloudFront**
+
+- Distributes static files (HTML, CSS, JS) from S3 to edge locations for faster delivery.
+- Caches content globally to minimize latency.
+- Ensures secure connections using SSL/TLS certificates issued by Amazon Certificate Manager.
+
+#### **Amazon Certificate Manager**
+
+- Provides SSL/TLS certificates for encrypting user communications.
+- Integrated with CloudFront for redirecting HTTP to HTTPS traffic.
+
+#### **Amazon S3**
+
+- Hosts static website files (HTML, CSS, JS) with public access enabled and configured for static website hosting, serving the content globally through CloudFront.
+
+---
 
 ### 🔢 Visitors counter
 
-The visitors counter was implemented in pure JavaScript and can be found here. It invokes the API Gateway to receive its response and update it into an HTML element to be displayed on the webpage. Each webpage hit increments one at the visitor's counter.
+The visitors counter is implemented in pure JavaScript (`visitors_counter.js`) and performs the following steps:
 
-⚠️ It is important to highlight that it simply counts each hit on the webpage, not the number of unique visitors (by capturing IP addresses or cookies, for example).
+1. Calls the API Gateway to retrieve the current counter value.
+2. Updates the counter value in DynamoDB via a Lambda function.
+3. Displays the updated count dynamically on the webpage.
+
+**⚠️ Important:**  
+This counter increments for every page hit and does not track unique visitors (e.g., no IP or cookie-based filtering).
+
+---
 
 ## ⚙️ Backend documentation
 
@@ -30,30 +68,35 @@ The visitors counter was implemented in pure JavaScript and can be found here. I
 
 #### 🪣 S3 configuration
 
-- AWS S3 Bucket to store content.
-- Static website hosting enabled.
-- Public access configured.
+- Stores static website files (HTML, CSS, JS).
+- Static website hosting is enabled, with public read access configured.
 
 #### 🌐 API Gateway
 
-- REST API endpoint for counter functionality
-- Integrated with Lambda function.
+- Provides a REST API endpoint for the counter functionality.
+- Integrates with Lambda to handle requests and responses.
 
 #### 📰 Lambda Function
 
-The Lambda Function implements the reading and updating visitors counter information stored in DynamoDB. It adds one to a record each time the function is invoked. The implementation was provided in Python language and can be found in this file.
+- Implements backend logic to read and update the visitor counter stored in DynamoDB.
+- Written in Python, the function increments a record each time it is invoked.
 
 #### 📊 DynamoDB
 
-The DynamoDB store the number of visitors to the resume website. A record is read and updated by one unit through Lambda Function each time that someone clicks on the page.
+- Stores the visitor count as a single record.
+- The counter is updated by the Lambda function for each API call.
+
+---
 
 ### 🔐 IAM roles and permissions
 
-- Lambda execution role with DynamoDB access.
-- API Gateway permissions to invoke Lambda.
-- S3 bucket policy for public read access.
-- CORS is enabled for security purposes in the S3 website domain.
+- **Lambda execution role**: Grants Lambda permission to read and update DynamoDB.
+- **API Gateway permissions**: Allows API Gateway to invoke the Lambda function.
+- **S3 bucket policy**: Enables public read access to static files.
+- **CORS configuration**: Ensures secure cross-origin requests between the custom domain and API Gateway.
 
-## 🤑 Cost analysis
+---
+
+### Cost Analysis
 
 WIP
