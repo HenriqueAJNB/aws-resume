@@ -2,7 +2,7 @@
 
 ## 🏗️ Architecture
 
-![architecture](.//img/architecture.png)
+![architecture](./img/architecture.png)
 
 The architecture illustrates a serverless web application divided into a static frontend and a serverless backend. The frontend is hosted on Amazon S3, distributed via CloudFront, and secured with SSL/TLS. The backend uses API Gateway and Lambda to handle dynamic requests, updating the visitor count in DynamoDB.
 
